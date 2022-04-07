@@ -16,6 +16,7 @@ class PostTableViewCell: UITableViewCell {
         let likes: String
         let views: String
     }
+    
     private lazy var screenWidth = (UIScreen.main.bounds.size.width - 48) / 4
     
     private lazy var backView: UIView = {
@@ -92,7 +93,6 @@ class PostTableViewCell: UITableViewCell {
         return stackView
     }()
 
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupView()

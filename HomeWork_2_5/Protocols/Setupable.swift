@@ -13,6 +13,6 @@ protocol Setupable {
     func setup(with viewModel: ViewModelProtocol)
 }
 
-protocol PhotoCellProtocol {
-    func setupPhotoCell(with viewModel: ViewModelProtocol)
+protocol SetupImagesProtocol {
+    func setupImage(with viewModel: ViewModelProtocol)
 }

@@ -9,7 +9,7 @@ import UIKit
 
 class PhotosTableViewCell: UITableViewCell {
     
-    struct ViewModel:ViewModelProtocol {
+    struct ViewModel: ViewModelProtocol {
         var photoName: String
     }
     
@@ -179,15 +179,5 @@ class PhotosTableViewCell: UITableViewCell {
         return [
             topConstraint, leadingConstraint, trailingConstraint, bottomConstraint
         ]
-    }
-    
-}
-
-extension PhotosTableViewCell: PhotoCellProtocol {
-    
-    func setupPhotoCell(with viewModel: ViewModelProtocol) {
-        guard let viewModel = viewModel as? ViewModel else { return }
-        
-//        self.imageViewPhoto.image = UIImage(named: viewModel.photoName)
     }
 }
