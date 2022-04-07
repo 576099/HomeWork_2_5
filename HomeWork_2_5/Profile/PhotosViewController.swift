@@ -21,7 +21,7 @@ class PhotosViewController: UIViewController {
                 let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)
 //                let jsonObj = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                 let photos = try self.jsonDecoder.decode(Photos.self, from: data)
-                print("json data: \(photos)")
+//                print("json data: \(photos)")
                 completion(photos.images)
             } catch let error {
                 print("parse error: \(error.localizedDescription)")

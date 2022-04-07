@@ -48,6 +48,10 @@ class ProfileViewController: UIViewController {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationBar()
+    }
     private func setupNavigationBar() {
         self.navigationController?.navigationBar.prefersLargeTitles = false
         //скрываем заголовок navigationBar именно у этого navigationController
