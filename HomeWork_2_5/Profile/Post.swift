@@ -7,17 +7,21 @@
 
 import Foundation
 
-struct Post {
-    let author: String
-    var description: String
-    var image: String
-    var likes: Int
-    var views: Int
-    
-    var publishedLikesAtString: String {
-        return "Likes: \(self.likes)"
+struct Posts: Decodable {
+
+    struct Article: Decodable {
+        let author: String
+        var description: String
+        var image: String
+        var likes: Int
+        var views: Int
+        
+        var publishedLikesAtString: String {
+            return "Likes: \(self.likes)"
+        }
+        var publishedViewsAtString: String {
+            return "Views: \(self.views)"
+        }
     }
-    var publishedViewsAtString: String {
-        return "Views: \(self.views)"
-    }
+    let articles: [Article]
 }

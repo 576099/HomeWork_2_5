@@ -29,25 +29,21 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
-    private var dataSource: [Post] = []
+    private lazy var jsonDecoder: JSONDecoder = {
+        return JSONDecoder()
+    }()
     
-    private func addPostsInDataSource() {
-        let post1 = Post(author: "Какие лучшие сериалы стоит посмотреть в первой половине апреля 2022 года?", description: "Телевизионные новинки первой половины апреля 2022 года за редким исключением так или иначе связаны криминальной тематикой. В одних проектах мы встретимся с полицейскими и детективами, в других - с юристами, прокурорами и адвокатами, а благодаря третьим заглянем в святая святых британской контрразведки. Но есть и развлекательные, ориентированные на женскую аудиторию проекты", image: "1", likes: 0, views: 99)
-        let post2 = Post(author: "Оскар 2022. Американская мечта в исполнении Уилла Смита", description: "Какие только меры не принимали организаторы церемонии вручения премий Американской Киноакадемии для спасения ежегодно падающего все больше рейтинга телевизионной трансляции. Каким только модным трендам не пытались следовать и каким только социальным группам не стремились угождать. Однако никакие реверансы, попытки усидеть на многих стульях и нелепые политические демарши ситуацию не спасали. Зрителей все меньше интересовало, кто получит заветные золотые статуэтки, и в каком платье появится на красной дорожке очередная звезда. Но Оскар 2022 запомнится всем. И вовсе не потому, что второй раз подряд в режиссерской номинации победила женщина, или из-за первого в истории успеха глухого актера.", image: "2", likes: 4, views: 7)
-        let post3 = Post(author: "HBO Max разрабатывает два спин-оффа Шерлока Холмса", description: "HBO Max и Warner Bros. планируют выстроить кино- и телевселенную о Шерлоке Холмсе по образцу телевизионных спин-оффов фильмов ", image: "3", likes: 45, views: 87)
-        let post4 = Post(author: "Объявлена дата премьеры второго сезона сериала В ритме жизни ", description: "Во втором сезоне Шейла Рубин (Бирн) успешно запускает свою первую видеокассету с фитнес-уроком только для того, чтобы столкнуться с новыми и более серьезными препятствиями на своем пути. Она разрывается между верностью к своему мужу (Рори Сковел) и ценностями, которые он представляет, и опасным влечением к кое-кому другому. И поскольку она больше не единственная, кто представляет фитнес в городе, ей приходится опережать некоторых новых свирепых конкурентов на пути к созданию полноценной фитнес-империи.", image: "4", likes: 33, views: 54)
-        
-        self.dataSource.append(post1)
-        self.dataSource.append(post2)
-        self.dataSource.append(post3)
-        self.dataSource.append(post4)
-    }
-
+    private var dataSource: [Posts.Article] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupNavigationBar()
         self.setupView()
-        self.addPostsInDataSource()
+        self.fetchPosts { [weak self] posts in
+            self?.dataSource = posts
+            self?.tableView.reloadData()
+        }
+//        self.addPostsInDataSource()
         self.tableView.reloadData()
 
     }
@@ -83,6 +79,21 @@ class ProfileViewController: UIViewController {
             topConstraint, leadingConstraint, trailingConstraint, bottomConstraint
         ])
     }
+    private func fetchPosts(completion: @escaping ([Posts.Article]) -> Void) {
+        if let path = Bundle.main.path(forResource: "Post", ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)
+//                let jsonObj = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                let posts = try self.jsonDecoder.decode(Posts.self, from: data)
+//                print("json data: \(posts)")
+                completion(posts.articles)
+            } catch let error {
+                print("parse error: \(error.localizedDescription)")
+            }
+        } else {
+            fatalError("Invalid filename/path.")
+        }
+    }
 }
 
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
@@ -104,9 +115,6 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
                 return cell
             }
             print(indexPath)
-//            let photoName = self.dataSource[indexPath.row]
-//            let viewModel = PhotosTableViewCell.ViewModel()
-//            cell.setup(with: viewModel)
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as? PostTableViewCell else {
