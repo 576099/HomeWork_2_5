@@ -114,7 +114,6 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
                 return cell
             }
-            print(indexPath)
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as? PostTableViewCell else {
@@ -151,7 +150,9 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     //обрабатываем касание на ячейку
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath == [1,0] {
-            print(indexPath)
+            let photoVC = PhotosViewController()
+            photoVC.title = "Photo Gallery"
+            self.navigationController?.pushViewController(photoVC, animated: true)
         }
         
     }
